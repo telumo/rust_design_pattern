@@ -1,84 +1,58 @@
-#[derive(Debug, Clone)]
-struct Banner {
-    string: String
-}
-
-impl Banner {
-    fn new(string: String) -> Self {
-        Banner {
-            string
+trait AbstractDisplay {
+    fn open(&self);
+    fn print(&self);
+    fn close(&self);
+    fn display(&self) {
+        self.open();
+        for _ in 0..5{
+            self.print();
         }
-    }
-
-    fn show_with_paren(&self) {
-        println!("({})", self.string)
-    }
-
-    fn show_with_aster(&self) {
-        println!("*{}*", self.string)
+        self.close();
     }
 }
 
-trait Print {
-    fn print_weak(&self);
-    fn print_strong(&self);
+impl AbstractDisplay for char {
+    fn open(&self){
+        print!("<<")
+    }
+    fn print(&self){
+        print!("{}", &self)
+    }
+    fn close(&self){
+        print!(">>");
+        println!();
+    }
 }
 
-struct PrintBanner{
-    banner: Banner
+trait PrintLine {
+    fn print_line(&self);
 }
 
-impl PrintBanner {
-    fn new(string: String) -> Self {
-        let banner = Banner::new(string);
-        PrintBanner {
-            banner
+impl PrintLine for String {
+    fn print_line(&self){
+        print!("+");
+        // TODO:日本語対応したい。
+        for _ in 0..self.bytes().len(){
+            print!("-");
         }
+        println!("+")
     }
 }
 
-impl Print for PrintBanner {
-    fn print_weak(&self) {
-        self.banner.show_with_paren()
+impl AbstractDisplay for String {
+    fn open(&self){
+        self.print_line()
     }
-
-    fn print_strong(&self) {
-        self.banner.show_with_aster()
+    fn print(&self){
+        println!("|{}|", &self)
+    }
+    fn close(&self){
+        self.print_line()
     }
 }
-
 
 fn main() {
-
-    let sample: String = "ほげほげ".into();
-    let sample_banner = Banner::new(sample);
-    sample_banner.show_with_paren();
-    sample_banner.show_with_aster();
-
-    let sample: String = "ほげほげ".into();
-    let p = PrintBanner::new(sample);
-    print_all(p);
-    // print_all(sample_banner); Error
-}
-
-fn print_all<T: Print>(p: T) {
-    p.print_weak();
-    p.print_strong();
-}
-
-#[cfg(test)]
-mod test {
+    'a'.display();
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    String::from("Hello, World").display();
 }
