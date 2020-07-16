@@ -1,13 +1,11 @@
 #[derive(Debug, Clone)]
 struct Book {
-    name: String
+    name: String,
 }
 
 impl Book {
     fn new(name: impl Into<String>) -> Self {
-        Book {
-            name: name.into()
-        }
+        Book { name: name.into() }
     }
 
     fn get_name(&self) -> String {
@@ -23,7 +21,7 @@ trait Iterator {
 
 // TODO: Tの制約をイテレーターにしたい
 // dyn？
-trait Aggregate{
+trait Aggregate {
     type Item;
     fn iterator(self) -> Self::Item;
 }
@@ -35,9 +33,9 @@ struct BookShelfIterator {
 
 impl BookShelfIterator {
     fn new(book_shelf: BookShelf) -> Self {
-        BookShelfIterator{
-            book_shelf: book_shelf,
-            index: 0
+        BookShelfIterator {
+            book_shelf,
+            index: 0,
         }
     }
 }
@@ -52,20 +50,18 @@ impl Iterator for BookShelfIterator {
     fn next(&mut self) -> Book {
         let book = self.book_shelf.get_book_at(self.index);
         self.index += 1;
-        return book;
+        book
     }
 }
 
 #[derive(Debug, Clone)]
 struct BookShelf {
-    books: Vec<Book>
+    books: Vec<Book>,
 }
 
 impl BookShelf {
     fn new() -> Self {
-        BookShelf {
-            books: Vec::new()
-        }
+        BookShelf { books: Vec::new() }
     }
 
     fn get_book_at(&self, index: usize) -> Book {
@@ -83,8 +79,8 @@ impl BookShelf {
 
 impl Aggregate for BookShelf {
     type Item = BookShelfIterator;
-    fn iterator(self) -> BookShelfIterator{
-       BookShelfIterator::new(self)
+    fn iterator(self) -> BookShelfIterator {
+        BookShelfIterator::new(self)
     }
 }
 
@@ -93,13 +89,12 @@ pub fn run() {
     bookshelf.append_book(Book::new("ハリーポッター"));
     bookshelf.append_book(Book::new("ハリーポッター2"));
     let mut it = bookshelf.iterator();
-    while it.has_next(){
+    while it.has_next() {
         let book = it.next();
         println!("Index: {}", it.index);
         println!("This book is {:?}", book.get_name());
     }
 }
-
 
 #[cfg(test)]
 mod test {
@@ -110,7 +105,6 @@ mod test {
         let book = Book::new("ハリーポッター");
         assert_eq!(book.get_name(), "ハリーポッター")
     }
-
 
     #[test]
     fn test_book_shelf_1() {
@@ -143,6 +137,4 @@ mod test {
         let length = book_shelf.get_length();
         assert_eq!(length, 5);
     }
-
-
 }

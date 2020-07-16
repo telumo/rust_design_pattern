@@ -1,13 +1,11 @@
 #[derive(Debug, Clone)]
 struct Banner {
-    string: String
+    string: String,
 }
 
 impl Banner {
     fn new(string: String) -> Self {
-        Banner {
-            string
-        }
+        Banner { string }
     }
 
     fn show_with_paren(&self) {
@@ -24,16 +22,14 @@ trait Print {
     fn print_strong(&self);
 }
 
-struct PrintBanner{
-    banner: Banner
+struct PrintBanner {
+    banner: Banner,
 }
 
 impl PrintBanner {
     fn new(string: String) -> Self {
         let banner = Banner::new(string);
-        PrintBanner {
-            banner
-        }
+        PrintBanner { banner }
     }
 }
 
@@ -47,9 +43,7 @@ impl Print for PrintBanner {
     }
 }
 
-
 pub fn run() {
-
     let sample: String = "ほげほげ".into();
     let sample_banner = Banner::new(sample);
     sample_banner.show_with_paren();
@@ -67,18 +61,4 @@ fn print_all<T: Print>(p: T) {
 }
 
 #[cfg(test)]
-mod test {
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-}
+mod test {}
