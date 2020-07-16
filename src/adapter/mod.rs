@@ -48,7 +48,7 @@ impl Print for PrintBanner {
 }
 
 
-fn main() {
+pub fn run() {
 
     let sample: String = "ほげほげ".into();
     let sample_banner = Banner::new(sample);
