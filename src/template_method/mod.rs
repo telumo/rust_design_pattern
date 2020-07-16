@@ -51,7 +51,7 @@ impl AbstractDisplay for String {
     }
 }
 
-fn main() {
+pub fn run() {
     'a'.display();
     
     String::from("Hello, World").display();
