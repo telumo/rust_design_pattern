@@ -1,7 +1,7 @@
-mod iterator;
 mod adapter;
-mod template_method;
 mod factory_method;
+mod iterator;
+mod template_method;
 
 fn main() {
     iterator::run();
