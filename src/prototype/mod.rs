@@ -4,26 +4,32 @@ use std::collections::HashMap;
 
 trait Product {
     fn operate(&self, s: String);
-    fn create_clone(&self) -> Self;
+    fn create_clone(&self) -> Box<dyn Product>;
 }
 
-struct Manager<V: Product> {
-    showcase: HashMap<String, V>,
+struct Manager {
+    showcase: HashMap<String, Box<dyn Product>>,
 }
 
-impl<V: Product + Copy> Manager<V> {
+impl Clone for Box<dyn Product> {
+    fn clone(&self) -> Box<dyn Product> {
+        self.create_clone()
+    }
+}
+
+impl Manager {
     fn new() -> Self {
-        let mut showcase = HashMap::new();
+        let showcase = HashMap::new();
         Manager { showcase }
     }
 
-    fn register(&mut self, name: String, proto: V) {
+    fn register(&mut self, name: String, proto: Box<dyn Product>) {
         self.showcase.insert(name, proto);
     }
 
-    fn create(&self, protoname: String) -> Option<V> {
+    fn create(&self, protoname: String) -> Option<Box<dyn Product>> {
         if let Some(p) = self.showcase.get(&protoname) {
-            return Some((*p).create_clone());
+            return Some((*p).clone());
         } else {
             return None;
         }
@@ -32,14 +38,14 @@ impl<V: Product + Copy> Manager<V> {
 
 // ↑ここまで
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Debug)]
 struct MessageBox {
     decochar: char,
 }
 
 impl MessageBox {
-    fn new(decochar: char) -> Self {
-        MessageBox { decochar }
+    fn new(decochar: char) -> Box<MessageBox> {
+        Box::new(MessageBox { decochar })
     }
 }
 
@@ -56,19 +62,19 @@ impl Product for MessageBox {
         }
         println!("");
     }
-    fn create_clone(&self) -> Self {
-        self.clone()
+    fn create_clone(&self) -> Box<dyn Product> {
+        Box::new((*self).clone())
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Debug)]
 struct UnderlinePen {
     ulchar: char,
 }
 
 impl UnderlinePen {
-    fn new(ulchar: char) -> Self {
-        UnderlinePen { ulchar }
+    fn new(ulchar: char) -> Box<UnderlinePen> {
+        Box::new(UnderlinePen { ulchar })
     }
 }
 
@@ -82,19 +88,20 @@ impl Product for UnderlinePen {
         }
         println!(" ");
     }
-    fn create_clone(&self) -> Self {
-        self.clone()
+    fn create_clone(&self) -> Box<dyn Product> {
+        Box::new((*self).clone())
     }
 }
 
 pub fn run() {
     let mut manager = Manager::new();
+    
     let upen = UnderlinePen::new('~');
     let mbox = MessageBox::new('*');
     let sbox = MessageBox::new('/');
     manager.register("strong message".into(), upen);
-    // manager.register("warning box".into(), mbox);
-    // manager.register("slash box".into(), sbox);
+    manager.register("warning box".into(), mbox);
+    manager.register("slash box".into(), sbox);
 
     if let Some(p) = manager.create("strong message".into()) {
         p.operate("Hello, world".into());
