@@ -29,9 +29,9 @@ impl Manager {
 
     fn create(&self, protoname: String) -> Option<Box<dyn Product>> {
         if let Some(p) = self.showcase.get(&protoname) {
-            return Some((*p).clone());
+            Some((*p).clone())
         } else {
-            return None;
+            None
         }
     }
 }
@@ -55,12 +55,12 @@ impl Product for MessageBox {
         for _ in 0..(length + 4) {
             print!("{}", self.decochar);
         }
-        println!("");
+        println!();
         println!("{} {} {}", self.decochar, s, self.decochar);
         for _ in 0..(length + 4) {
             print!("{}", self.decochar);
         }
-        println!("");
+        println!();
     }
     fn create_clone(&self) -> Box<dyn Product> {
         Box::new((*self).clone())
