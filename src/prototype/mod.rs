@@ -95,7 +95,7 @@ impl Product for UnderlinePen {
 
 pub fn run() {
     let mut manager = Manager::new();
-    
+
     let upen = UnderlinePen::new('~');
     let mbox = MessageBox::new('*');
     let sbox = MessageBox::new('/');

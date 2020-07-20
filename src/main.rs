@@ -1,4 +1,5 @@
 mod adapter;
+mod builder;
 mod factory_method;
 mod iterator;
 mod prototype;
@@ -12,4 +13,5 @@ fn main() {
     factory_method::run();
     singleton::run();
     prototype::run();
+    builder::run();
 }
