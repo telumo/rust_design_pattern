@@ -7,11 +7,11 @@ mod singleton;
 mod template_method;
 
 fn main() {
-    iterator::run();
-    adapter::run();
-    template_method::run();
-    factory_method::run();
-    singleton::run();
-    prototype::run();
+    // iterator::run();
+    // adapter::run();
+    // template_method::run();
+    // factory_method::run();
+    // singleton::run();
+    // prototype::run();
     builder::run();
 }

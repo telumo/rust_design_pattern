@@ -4,15 +4,21 @@ trait Builder {
     fn make_string(&mut self, str: String);
     fn make_items(&mut self, items: Vec<String>);
     fn close(&mut self);
+    fn get_result(&mut self) -> String;
 }
 
-struct Director<B: Builder> {
-    builder: B,
+struct Director<T: Builder> {
+    builder: T,
 }
 
-impl<B: Builder> Director<B> {
-    fn set_builder(&mut self, builder: B) {
-        self.builder = builder
+// ここまでフレームワーク
+
+impl<T: Builder + Copy> Director<T> {
+    fn new(builder: &T ) -> Self {
+        let director : Director<T> = Director {
+            builder: *builder
+        };
+        director
     }
     fn construct(&mut self) {
         self.builder.make_title("Greeting".into());
@@ -29,8 +35,18 @@ impl<B: Builder> Director<B> {
     }
 }
 
+// TODO: コピートレイトが実装できない
+#[derive(Copy)]
 struct TextBuilder {
     buffer: Vec<String>,
+}
+
+impl TextBuilder {
+    fn new() -> Self {
+        TextBuilder {
+            buffer: Vec::new()
+        }
+    }
 }
 
 impl Builder for TextBuilder {
@@ -52,10 +68,19 @@ impl Builder for TextBuilder {
     fn close(&mut self) {
         self.buffer.push("=============================\n".into());
     }
+    fn get_result(&mut self) -> String {
+        self.buffer.clone().into_iter().collect()
+    }
 }
 
-// ここまでフレームワーク
+
 
 pub fn run() {
-    println!("Hello from Builder")
+    let mut textBuilder = TextBuilder::new();
+    let mut director = Director::new(&mut textBuilder);
+    director.construct();
+    let result = textBuilder.get_result();
+
+    println!("{:?}", result);
+
 }
