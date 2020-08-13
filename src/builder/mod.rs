@@ -4,11 +4,7 @@ trait Builder {
     fn make_string(&mut self, str: String);
     fn make_items(&mut self, items: Vec<String>);
     fn close(&mut self);
-<<<<<<< HEAD
-    fn get_result(&self) -> String;
-=======
     fn get_result(&mut self) -> String;
->>>>>>> 2b7a8f99e58226f3fdca0f70606aa1a22635d30e
 }
 
 struct Director<T: Builder> {
@@ -16,21 +12,12 @@ struct Director<T: Builder> {
 }
 
 // ここまでフレームワーク
-
-<<<<<<< HEAD
-impl <B: Builder> Director <B> {
-    fn new(builder: B) -> Self {
-        Director {
-            builder
-        }
-=======
 impl<T: Builder + Copy> Director<T> {
     fn new(builder: &T ) -> Self {
         let director : Director<T> = Director {
             builder: *builder
         };
         director
->>>>>>> 2b7a8f99e58226f3fdca0f70606aa1a22635d30e
     }
     fn construct(&mut self) {
         self.builder.make_title("Greeting".into());
@@ -47,20 +34,12 @@ impl<T: Builder + Copy> Director<T> {
     }
 }
 
-<<<<<<< HEAD
-#[derive(Clone)]
-=======
 // TODO: コピートレイトが実装できない
 #[derive(Copy)]
->>>>>>> 2b7a8f99e58226f3fdca0f70606aa1a22635d30e
 struct TextBuilder {
     buffer: Vec<String>,
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 2b7a8f99e58226f3fdca0f70606aa1a22635d30e
 impl TextBuilder {
     fn new() -> Self {
         TextBuilder {
@@ -88,11 +67,7 @@ impl Builder for TextBuilder {
     fn close(&mut self) {
         self.buffer.push("=============================\n".into());
     }
-<<<<<<< HEAD
-    fn get_result(&self) -> String {
-=======
     fn get_result(&mut self) -> String {
->>>>>>> 2b7a8f99e58226f3fdca0f70606aa1a22635d30e
         self.buffer.clone().into_iter().collect()
     }
 }
@@ -100,15 +75,9 @@ impl Builder for TextBuilder {
 
 
 pub fn run() {
-<<<<<<< HEAD
-
-    let textBuilder = TextBuilder::new();
-
-    let mut director = Director::new(textBuilder);
-=======
     let mut textBuilder = TextBuilder::new();
     let mut director = Director::new(&mut textBuilder);
->>>>>>> 2b7a8f99e58226f3fdca0f70606aa1a22635d30e
+
     director.construct();
     let result = textBuilder.get_result();
 
